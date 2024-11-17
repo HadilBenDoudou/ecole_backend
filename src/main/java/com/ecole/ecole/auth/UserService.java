@@ -41,6 +41,42 @@ public class UserService {
     }
 
 
+    public void updatePassword(String email, String newPassword) {
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        // Update password and save
+        user.setPassword(passwordEncoder.encode(newPassword)); // Encrypt the new password
+        userRepository.save(user);
+    }
+
+
+
+
+
+
+    public void deleteUserById(Long id) {
+        System.out.println("Service: Attempting to delete user with ID: " + id); // Log l'ID
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
+        System.out.println("Service: User with ID: " + id + " deleted successfully");
+    }
+
+
+    private BCryptPasswordEncoder passwordEncoderr = new BCryptPasswordEncoder();
+
+    public void saveUser(User user) {
+        user.setPassword(passwordEncoderr.encode(user.getPassword()));
+        // sauvegarder l'utilisateur avec le mot de passe haché
+    }
+
+
+
+
+
+
 
 
 }
